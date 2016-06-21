@@ -1,16 +1,21 @@
-FROM resin/raspberrypi3-python:latest
+FROM resin/raspberrypi3-debian:jessie
 
-RUN apt-get update \
-    && apt-get install -yq bluetooth bluez bluez-firmware libbluetooth-dev
+# Add the key for foundation repository
+RUN apt-get update
+RUN apt-get install wget
+RUN wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key -O - | sudo apt-key add -
 
-WORKDIR /usr/src/app
+# Add apt source of the foundation repository
+# We need this source because bluez needs to be patched in order to work with rpi3 ( Issue #1314: How to get BT working on Pi3B. by clivem in raspberrypi/linux on GitHub )
+# Add it on top so apt will pick up packages from there
+RUN sed -i '1s#^#deb http://archive.raspberrypi.org/debian jessie main\n#' /etc/apt/sources.list
+RUN apt-get update
 
-COPY ./requirements.txt /requirements.txt
+# Install required packages
+RUN apt-get install bluez bluez-firmware
 
-RUN pip install -r /requirements.txt
+WORKDIR usr/src/app
 
-COPY . ./
+COPY scan.sh ./
 
-ENV INITSYSTEM on
-
-CMD ["python","src/main.py"]
+CMD ["bash", "scan.sh"]
