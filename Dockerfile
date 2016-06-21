@@ -1,7 +1,7 @@
 FROM resin/raspberrypi3-python:latest
 
 RUN apt-get update \
-    && apt-get install -yq bluez bluez-firmware libbluetooth-dev
+    && apt-get install -yq bluetooth bluez bluez-firmware libbluetooth-dev
 
 WORKDIR /usr/src/app
 
