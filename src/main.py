@@ -2,6 +2,7 @@ import bluetooth
 import time
 
 def find_devices():
+    print("Searching for nearby devices")
     nearby_devices = bluetooth.discover_devices(lookup_names=True)
     print("found %d devices" % len(nearby_devices))
 
