@@ -1,4 +1,4 @@
-FROM resin/raspberrypi3-debian:jessie
+FROM resin/raspberrypi3-python
 
 # Add the key for foundation repository
 RUN apt-get update
